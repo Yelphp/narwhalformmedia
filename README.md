@@ -1,19 +1,48 @@
---- composer.json 添加：
-`
-	"repositories": [
-	    {
-	        "type": "path",
-	        "url": "app/Admin/Extensions/laravel-admin-ext/narwhalformmedia"
-	    }
-	]
-`
+# Laravar-admin 图片管理拓展
+
+## 依赖
+
+  -    | 版本  
+ ---- | ----- 
+ php  | >=7.0.0 
+ laravel-admin  | >=~1.6 
+
+## 安装
+
+### composer 安装
+
+```
+composer require yelphp/narwhalformmedia
+```
 
 
--- composer 安装
-`
-composer require laravel-admin-ext/narwhalformmedia
-`
+### 发布资源
 
--- 发布静态资源
-`php artisan vendor:publish --provider=Narwhal\FormMedia\FormMediaServiceProvider
-`
+```
+php artisan vendor:publish --provider=Narwhal\FormMedia\FormMediaServiceProvider
+```
+
+## 使用
+
+#### 单图 数据库结构 varchar
+
+##### 可删除
+
+```
+$form->MediaYel('photo','图片')->limit(1)->remove(true)->help('单图，可删除');
+```
+
+##### 不可删除
+
+```
+$form->MediaYel('photo','图片')->limit(1)->remove(false)->help('单图，可删除');
+
+$form->MediaYel('photo','图片')->limit(1)->help('单图，可删除');
+```
+
+#### 多图 数据库结构 json
+
+```
+$form->MediaYel('photo','图片')->limit(9)->move(true);  //可删除
+
+```
