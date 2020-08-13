@@ -1,9 +1,9 @@
 {
-    "name": "laravel-admin-ext/narwhalformmedia",
-    "description": "description...",
+    "name": "yelphp/narwhalformmedia",
+    "description": "Laravel - Admin Image Manager extension",
     "type": "library",
     "keywords": ["laravel-admin", "extension"],
-    "homepage": "https://github.com/laravel-admin-ext/narwhalformmedia",
+    "homepage": "https://github.com/Yelphp/narwhalformmedia",
     "license": "MIT",
     "authors": [
         {
