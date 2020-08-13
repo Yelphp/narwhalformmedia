@@ -10,11 +10,11 @@ class FormMediaField extends Field
     protected $view = 'narwhalformmedia::mediayel_field';
 
     protected static $js = [
-        'vendor/laravel-admin-ext/narwhalformmedia/mediayel_field.js'
+        'vendor/yelphp/narwhalformmedia/mediayel_field.js'
     ];
  
     protected static $css = [
-        'vendor/laravel-admin-ext/narwhalformmedia/mediayel_field.css'
+        'vendor/yelphp/narwhalformmedia/mediayel_field.css'
     ];
 
     protected $limit = 1;

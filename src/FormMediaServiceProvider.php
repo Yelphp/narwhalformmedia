@@ -23,7 +23,7 @@ class FormMediaServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole() && $assets = $extension->assets()) {
             $this->publishes(
-                [$assets => public_path('vendor/laravel-admin-ext/narwhalformmedia')],
+                [$assets => public_path('vendor/yelphp/narwhalformmedia')],
                 'narwhalformmedia'
             );
         }
