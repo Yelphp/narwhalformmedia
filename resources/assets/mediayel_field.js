@@ -41,7 +41,6 @@
 
         // 弹出图片选择器
         $('#NarwhalMediaModel'+_this.name).on('show.bs.modal', function (event) {
-            console.log('弹窗')
             var button = $(event.relatedTarget) // Button that triggered the modal
             var recipient = button.data('whatever') // Extract info from data-* attributes
             var title = button.data('title') //标题
@@ -55,8 +54,6 @@
 
         //点击文件
         $("body").delegate(".thumbnail.narwhal_file_op"+_this.name,"click",function(){
-            console.log('点击文件')
-
             var data = $(this);
             var path = data.context.dataset.path;
             _this.getdata(path)
@@ -65,7 +62,6 @@
 
         //点击nav
         $("body").delegate(".narwhal_nav_li"+_this.name,"click",function(){
-            console.log('点击nav')
             var data = $(this);
             var path = data.context.dataset.path;
             _this.getdata(path)
@@ -73,7 +69,6 @@
 
         //新建文件
         $("body").delegate(".btn.btn-default.narwhal_dir_button_"+_this.name,'click',function(res){
-            console.log('新建文件')
             var dir = $("#narwhal_dir_input_"+_this.name).val();
             
             var form = new FormData();
@@ -131,12 +126,10 @@
 
         // 提交按钮
         $("body").delegate('#narwhal_submit'+_this.name,'click',function(res){
-
             var limit = _this.limit;
             var name = _this.name;
             var rootpath = _this.rootpath;
             var remove = _this.remove
-            console.log(name)
             // 提交按钮
             var url_list = [];
             var url_list_str = $('input[name='+name+']').val();
