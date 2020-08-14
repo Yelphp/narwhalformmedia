@@ -29,13 +29,13 @@ php artisan vendor:publish --provider=Narwhal\FormMedia\FormMediaServiceProvider
 ##### 可删除
 
 ```
-$form->photo('photo','图片')->limit(1)->remove(true)->help('单图，可删除');
+$form->photo('photo','图片')->limit(1)->remove(true)->help('单图，不可删除可删除');
 ```
 
 ##### 不可删除
 
 ```
-$form->photo('photo','图片')->limit(1)->remove(false)->help('单图，可删除');
+$form->photo('photo','图片')->limit(1)->remove(false)->help('单图，不可删除可删除');
 
 $form->photo('photo','图片')->limit(1)->help('单图，可删除');
 ```
@@ -50,7 +50,13 @@ $form->photos('photo','图片')->limit(9)->remove(true);  //可删除
 ### 参数说明
 ```
 limit(int)      ： 图片限制条数
-remove(boolean) :  是否有删除按钮
+remove(boolean) :  是否有删除按钮   
+
+photo 与  photos 的 参数默认值不一样
+
+photo  默认 limit = 1  remove = false
+
+photos 默认 limit = 9  remove = true
 ```
 
 
