@@ -12,9 +12,4 @@ class FormMedia extends Extension
 
     public $assets = __DIR__.'/../resources/assets';
 
-    public $menu = [
-        'title' => 'Formmedia',
-        'path'  => 'narwhalformmedia',
-        'icon'  => 'fa-gears',
-    ];
 }

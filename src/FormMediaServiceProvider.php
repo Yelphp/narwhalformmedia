@@ -30,7 +30,8 @@ class FormMediaServiceProvider extends ServiceProvider
 
         // 加载插件
         Admin::booting(function () {
-            Form::extend('MediaYel', FormMediaField::class);
+            Form::extend('photo', FormMediaField::class);
+            Form::extend('photos', FormMediaFieldSelect::class);
         });
 
         // 加载路由

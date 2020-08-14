@@ -5,7 +5,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Facades\Storage;
 
-class FormMediaField extends Field
+class FormMediaFieldSelect extends Field
 {
     protected $view = 'narwhalformmedia::mediayel_field';
  
@@ -17,9 +17,9 @@ class FormMediaField extends Field
         'vendor/yelphp/narwhalformmedia/mediayel_field.js'
     ];
 
-    protected $limit = 1;
+    protected $limit = 9;
     protected $rootpath = '';
-    protected $remove = false;
+    protected $remove = true;
 
     /**
      * Set rows of textarea.
@@ -28,14 +28,14 @@ class FormMediaField extends Field
      *
      * @return $this
      */
-    public function limit($limit = 1)
+    public function limit($limit = 9)
     {
         $this->limit = $limit;
 
         return $this;
     }
 
-    public function remove($tag = false){
+    public function remove($tag = true){
         $this->remove = $tag;
         return $this;
     }
