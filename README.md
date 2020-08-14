@@ -60,4 +60,21 @@ photos 默认 limit = 9  remove = true
 ```
 
 
+###### 多图上传提交的数据为 json 字符串，如需输出数组，请在对应模型中加入下面代码
+```
+namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+
+class Demo extends Model
+{
+	
+	public function getPicturesAttribute($pictures)
+	{
+
+	    return json_decode($pictures, true);
+
+	}
+
+}
+```

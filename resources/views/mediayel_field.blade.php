@@ -12,10 +12,11 @@
 
         @include('admin::form.error')
         <div class="input-group">
-            <input type="text" name="{{$name}}" class="form-control {{$class}}"  placeholder="{{ $placeholder }} "  {!! $attributes !!} value="{{ old($column, $value) }}" />
+            
+            <input type="text" name="{{$name}}" class="form-control {{$class}}"  placeholder="{{ $placeholder }} "  {!! $attributes !!} value="{{ old($column, $value)?(is_array(old($column, $value))?json_encode(old($column, $value)):old($column, $value)):'' }}" />
 
             <div class="input-group-btn input-group-append">
-                <div tabindex="500" class="btn btn-primary btn-file" type="button"  data-toggle="modal" data-target="#NarwhalMediaModel{{$name}}" data-title="{{$label}}" data-name="{{$name}}"  data-vaule="{{ old($column, $value) }}"  data-limit="{{$limit}}" data-rootpath="{{$rootpath}}" data-remove="{{$remove}}" data-token="{{ csrf_token() }}">
+                <div tabindex="500" class="btn btn-primary btn-file" type="button"  data-toggle="modal" data-target="#NarwhalMediaModel{{$name}}" data-title="{{$label}}" data-name="{{$name}}"  data-vaule="{{ old($column, $value)?(is_array(old($column, $value))?json_encode(old($column, $value)):old($column, $value)):'' }}"  data-limit="{{$limit}}" data-rootpath="{{$rootpath}}" data-remove="{{$remove}}" data-token="{{ csrf_token() }}">
                     <i class="glyphicon glyphicon-folder-open"></i>&nbsp;  
                     <span class="hidden-xs">浏览</span>
                 </div>
