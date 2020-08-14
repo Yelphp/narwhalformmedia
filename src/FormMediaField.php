@@ -8,10 +8,6 @@ use Illuminate\Support\Facades\Storage;
 class FormMediaField extends Field
 {
     protected $view = 'narwhalformmedia::mediayel_field';
-
-    protected static $js = [
-        'vendor/yelphp/narwhalformmedia/mediayel_field.js'
-    ];
  
     protected static $css = [
         'vendor/yelphp/narwhalformmedia/mediayel_field.css'
@@ -52,8 +48,13 @@ class FormMediaField extends Field
             'remove' => $this->remove,
             'xie' => '/'
         ]);
+
+        
         return parent::render();
     }
+
+
+
 
 
 

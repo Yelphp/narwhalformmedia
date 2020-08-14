@@ -1,56 +1,24 @@
-var getArgs=(function(){  
 
-    var sc=document.getElementsByTagName('script'); 
-    console.log(sc[sc.length-1].src.split('?'))
+var scriptArg = [];
+scriptArg['limit'] = 1;
+scriptArg['name'] = '';
+scriptArg['rootpath'] = '';
+scriptArg['remove'] = false;
+scriptArg['token'] = '';
 
-    var paramsArr_src = sc[sc.length-1].src.split('?')[1];
-
-    console.log(paramsArr_src)
-
-    var paramsArr=paramsArr_src.split('&');
-
-   var args={},argsStr=[],param,t,name,value;  
-
-    for(var ii=0,len=paramsArr.length;ii<len;ii++){  
-
-            param=paramsArr[ii].split('=');  
-
-            name=param[0],value=param[1];  
-
-            if(typeof args[name]=="undefined"){ //参数尚不存在  
-
-                args[name]=value;  
-
-            }else if(typeof args[name]=="string"){ //参数已经存在则保存为数组  
-
-                args[name]=[args[name]]  
-
-                args[name].push(value);  
-
-            }else{  //已经是数组的  
-
-                args[name].push(value);  
-
-            }  
-
-    }
-    return function(){return args;} //以json格式返回获取的所有参数  
-})();
-
-var scriptArg = getArgs();
-console.log(scriptArg)
-console.log(scriptArg['name'])
-// console.log("username:"+getArgs()["s"]); 
 var narwhal_crr_path = '/';
 
-initShow(scriptArg['name']);
+
 
 //初始化话预览值
-function initShow(name){
-    var limit = scriptArg['limit'];
-    var name = scriptArg['name'];
-    var rootpath = scriptArg['rootpath'];
-    var remove = scriptArg['remove'];
+function initShow(name,limit,remove,rootpath,token){
+
+    scriptArg['limit'] = limit;
+    scriptArg['name'] = name;
+    scriptArg['rootpath'] = rootpath;
+    scriptArg['remove'] = remove;
+    scriptArg['token'] = token;
+
     var value = $('input[name='+name+']').val();
 
     var value_arr = [];
@@ -68,156 +36,21 @@ function initShow(name){
     }
 }
     
-// 弹出图片选择器
-$('#NarwhalMediaModel').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
-    var recipient = button.data('whatever') // Extract info from data-* attributes
-    var title = button.data('title') //标题
-    var name = button.data('name') //标题
-    var modal = $(this)
-    modal.find('.modal-title').text('请选择' + title)
-    modal.find('.modal-body input').val(recipient)
-    narwhal_image_submit_button(name);
-    getdata('/',"/admin/narwhalformmedia/getfiledata",name)  //获取数据
-})
+
 
 // 提交按钮
-$('#narwhal_submit_'+scriptArg['name']).on('click',function(res){
+$('#narwhal_submit').on('click',function(res){
     var limit = scriptArg['limit'];
     var name = scriptArg['name'];
     var rootpath = scriptArg['rootpath'];
     var remove = scriptArg['remove'];
     // 提交按钮
-    narwhal_sumbit_select_op(limit,names,rootpath,remove)
+    narwhal_sumbit_select_op(limit,name,rootpath,remove)
 });
-
-
-// 预览操作
-$("body").delegate(".narwhal_img_show_"+scriptArg['name']+"_item","click",function(){
-    var url_list = [];
-    var itemurl = $(this).context.dataset.url;
-    var op = $(this).context.dataset.op;
-
-    var limit = scriptArg['limit'];
-    var name = scriptArg['name'];
-    var rootpath = scriptArg['rootpath'];
-    var remove = scriptArg['remove'];
-
-    var new_url_list = [];
-
-    var url_list_str = $('input[name='+name+']').val();
-
-
-    if(limit == 1){
-        url_list.push(url_list_str);
-    }else{
-        url_list = JSON.parse( url_list_str );
-    }
-
-    if(op == 'delete'){
-        //删除
-        for (var i = 0; i < url_list.length ; i++) {
-            if(url_list[i] != itemurl){
-                new_url_list.push(url_list[i]);
-            }
-        }
-    }else if(op == 'left'){
-        //移动
-        var key = 0;
-        for (var i = 0; i < url_list.length ; i++) {
-            if(url_list[i] == itemurl){
-               key = i;
-               break;
-            }
-        }
-        new_url_list = url_list;
-        var temp = new_url_list[key-1];
-        new_url_list[key-1] = new_url_list[key];
-        new_url_list[key] = temp;
-    }else if(op == 'right'){
-        //移动
-        var key = 0;
-        for (var i = 0; i < url_list.length ; i++) {
-            if(url_list[i] == itemurl){
-               key = i;
-               break;
-            }
-        }
-        new_url_list = url_list;
-        var temp = new_url_list[key+1];
-        new_url_list[key+1] = new_url_list[key];
-        new_url_list[key] = temp;
-    }else{
-        return 0;
-    }
-    var inputs = JSON.stringify( new_url_list );
-    if(inputs == '[]'){
-        inputs = '';
-    }
-    $('input[name='+name+']').val(inputs);
-    changeImg(new_url_list,name,limit,rootpath,remove)
-    return 1;
-});
-
-//点击图片
-$("body").delegate(".narwhal_img_op"+scriptArg['name'],"click",function(){
-    var limit = scriptArg['limit'];
-    var name = scriptArg['name'];
-    var rootpath = scriptArg['rootpath'];
-    var remove = scriptArg['remove'];
-
-    var select_num_op = $('.narwhal_img_op'+name+'.narwhal_select_true');
-
-
-    //现有多少张
-    var now_num_val = $('input[name='+name+']').val();
-    if(now_num_val == '[]'){
-        now_num_val = '';
-    }
-    var now_num_arr = [];
-    if(now_num_val){
-        if(limit == 1){
-            now_num_arr.push(now_num_val)
-        }else{
-            now_num_arr=JSON.parse( now_num_val );
-        }
-    }
-    var now_num = now_num_arr.length;
-
-    var select_num = now_num + select_num_op.length;
-
-    var classlist = $(this).context.classList;
-    
-    var tag = false;
-    for (var i = 0; i < classlist.length; i++) {
-        if(classlist[i] == 'narwhal_select_true'){
-            tag = true;
-        }
-    }
-    if(tag){
-        //取消选中
-        $(this).removeClass('narwhal_select_true');
-    }else{
-        //选中
-        if(limit == 1){
-            //取消之前选中的
-            $('.narwhal_select_true').removeClass('narwhal_select_true')
-
-        }else{
-            if(select_num >= limit){
-                narwhal_tip('选择图片不能超过 '+limit+' 张');
-                return 1;
-            }
-        }
-        $(this).addClass('narwhal_select_true');
-    }
-    return 1;
-});
-
 
 
 // 上传图片
-$('.file-upload.narwhal_upload_'+scriptArg['name']).on('change', function(){
+$('.file-upload.narwhal_upload').on('change', function(){
    var files = $(this).context.files;
    var form = new FormData();
    for (var i = 0; i < files.length; i++) {
@@ -234,7 +67,7 @@ $('.file-upload.narwhal_upload_'+scriptArg['name']).on('change', function(){
         success: function(data){
             if(data['code'] == 200){
                 toastr.success(data['msg']);
-                getdata(narwhal_crr_path,"/admin/narwhalformmedia/getfiledata",scriptArg['name'])  //获取数据
+                getdata(narwhal_crr_path,"/admin/narwhalformmedia/getfiledata",scriptArg['name'],scriptArg)  //获取数据
             }else{
                 toastr.error(data['msg']);
             }
@@ -246,9 +79,9 @@ $('.file-upload.narwhal_upload_'+scriptArg['name']).on('change', function(){
 });
 
  //新建文件夹
-$(".btn.btn-default.narwhal_dir_button"+scriptArg['name']).on('click',function(res){
+$(".btn.btn-default.narwhal_dir_button").on('click',function(res){
 
-    var dir = $(".form-control.pull-right.narwhal_dir_input"+scriptArg['name']).val();
+    var dir = $(".form-control.pull-right.narwhal_dir_input").val();
     var form = new FormData();
     form.append("name",dir);
     form.append("dir",narwhal_crr_path);
@@ -263,7 +96,7 @@ $(".btn.btn-default.narwhal_dir_button"+scriptArg['name']).on('click',function(r
         success: function(data){
             if(data['code'] == 200){
                 toastr.success(data['msg']);
-                getdata(narwhal_crr_path,"/admin/narwhalformmedia/getfiledata",scriptArg['name'])  //获取数据
+                getdata(narwhal_crr_path,"/admin/narwhalformmedia/getfiledata",scriptArg['name'],scriptArg)  //获取数据
             }else{
                 toastr.error(data['msg']);
             }
@@ -280,14 +113,16 @@ $(".btn.btn-default.narwhal_dir_button"+scriptArg['name']).on('click',function(r
 $("body").delegate(".thumbnail.narwhal_file_op","click",function(){
     var data = $(this);
     var path = data.context.dataset.path;
-    getdata(path,"/admin/narwhalformmedia/getfiledata",scriptArg['name'])
+
+
+    getdata(path,"/admin/narwhalformmedia/getfiledata",scriptArg['name'],scriptArg)
 });
 
 //点击nav
 $("body").delegate(".narwhal_nav_li","click",function(){
     var data = $(this);
     var path = data.context.dataset.path;
-    getdata(path,"/admin/narwhalformmedia/getfiledata",scriptArg['name'])
+    getdata(path,"/admin/narwhalformmedia/getfiledata",scriptArg['name'],scriptArg)
 });
 
 
@@ -319,6 +154,7 @@ function unique1(arr){
 
 // 改变预览
 function changeImg(url_list , name, limit , rootpath,remove){
+    console.log()
     $(".narwhal_img_show_row_"+name).html('');
     if(url_list.length > 0){
         $('.narwhal_img_show_'+name).show();
@@ -339,13 +175,17 @@ function changeImg(url_list , name, limit , rootpath,remove){
             html += '<a type="button" class="btn btn-default btn file-delete-multiple narwhal_img_show_'+name+'_item" data-url="'+url_list[i]+'" data-op="right" title="右"><i class="fa fa-arrow-right"></i></a>';
         }
         $(".narwhal_img_show_row_"+name).append(html+'</div></div></div>');
-        
     }
-
 }
 
 // 获取图片数据
-function getdata(path = '/',url,name){
+function getdata(path = '/',url,name, scriptArgs){
+    scriptArg['limit'] = scriptArgs['limit'];
+    scriptArg['name'] = scriptArgs['name'];
+    scriptArg['rootpath'] = scriptArgs['rootpath'];
+    scriptArg['remove'] = scriptArgs['remove'];
+    scriptArg['token'] = scriptArgs['token'];
+
     $.ajax({
         method: 'GET',
         url: url+"?path="+path,
@@ -371,7 +211,7 @@ function getdata(path = '/',url,name){
                     htmltemp += '<div class="col-xs-4 col-md-3">';
                     
                     if(data['list'][i]['type'] == 'image'){
-                        htmltemp +=     '<div class="thumbnail  narwhal_img_op'+name+'" data-url="'+data['list'][i]['name']+'">';
+                        htmltemp +=     '<div class="thumbnail  narwhal_img_op'+scriptArg['name']+'" data-url="'+data['list'][i]['name']+'">';
                     }else{
                         htmltemp +=    '<div class="thumbnail " data-url="'+data['list'][i]['name']+'">';
                     }
@@ -433,12 +273,4 @@ function narwhal_sumbit_select_op(limit,names,rootpath,remove){
     
     changeImg(url_list,names,limit,rootpath,remove)
     $('#NarwhalMediaModel').modal('hide');
-}
-
-
-function narwhal_image_submit_button(name){
-    $('#narwhal_image_submit').html(`
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        <button type="button" class="btn btn-primary" id='narwhal_submit_`+name+`'>确定</button>
-    `);
 }
