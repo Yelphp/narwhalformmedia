@@ -10,27 +10,72 @@
         this.narwhal_crr_path = '/';
     }
 
+    //初始化
+    MediaYel.prototype.init = function(){
+        var name = this.name;
+        var limit = this.limit;
+        var remove = this.remove;
+        var rootpath = this.rootpath;
+        var _this = this;
+        var value = $('input[name='+name+']').val();
+        var value_arr = [];
+        if(value){
+            if(limit == 1){
+                if(value != '[]' && value != ''){
+                    value_arr.push(value)
+                }
+            }else{
+                value_arr=JSON.parse(value);
+            }
+            _this.changeImg(value_arr);
+        }else{
+            $('.narwhal_img_show_'+name).hide();
+        }
+        
+    }
+
     // 初始化
     MediaYel.prototype.Run = function(){
 
         var _this = this;
+
+        // 弹出图片选择器
+        $('#NarwhalMediaModel'+_this.name).on('show.bs.modal', function (event) {
+            console.log('弹窗')
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('whatever') // Extract info from data-* attributes
+            var title = button.data('title') //标题
+            var name = button.data('name') //标题
+            var limit = button.data('limit') //标题
+            var remove = button.data('remove') //标题
+            var rootpath = button.data('rootpath') //标题
+            var modal = $(this)
+            modal.find('.modal-title').text('请选择' + title)
+        })
+
         //点击文件
-        $("body").delegate(".thumbnail.narwhal_file_op","click",function(){
+        $("body").delegate(".thumbnail.narwhal_file_op"+_this.name,"click",function(){
+            console.log('点击文件')
+
             var data = $(this);
             var path = data.context.dataset.path;
             _this.getdata(path)
+
         });
 
         //点击nav
-        $("body").delegate(".narwhal_nav_li","click",function(){
+        $("body").delegate(".narwhal_nav_li"+_this.name,"click",function(){
+            console.log('点击nav')
             var data = $(this);
             var path = data.context.dataset.path;
             _this.getdata(path)
         });
 
         //新建文件
-        $(".btn.btn-default.narwhal_dir_button").on('click',function(res){
-            var dir = $(".form-control.pull-right.narwhal_dir_input").val();
+        $("body").delegate(".btn.btn-default.narwhal_dir_button_"+_this.name,'click',function(res){
+            console.log('新建文件')
+            var dir = $("#narwhal_dir_input_"+_this.name).val();
+            
             var form = new FormData();
             form.append("name",dir);
             form.append("dir",_this.narwhal_crr_path);
@@ -55,9 +100,8 @@
             });
         });
 
-
         //上传图片
-        $('.file-upload.narwhal_upload').on('change', function(){
+        $("body").delegate('.file-upload.narwhal_upload'+_this.name,'change', function(){
            var files = $(this).context.files;
            var form = new FormData();
            for (var i = 0; i < files.length; i++) {
@@ -83,6 +127,50 @@
                     toastr.error('上传失败');
                 }
             });
+        });
+
+        // 提交按钮
+        $("body").delegate('#narwhal_submit'+_this.name,'click',function(res){
+
+            var limit = _this.limit;
+            var name = _this.name;
+            var rootpath = _this.rootpath;
+            var remove = _this.remove
+            console.log(name)
+            // 提交按钮
+            var url_list = [];
+            var url_list_str = $('input[name='+name+']').val();
+            if(url_list_str == '[]'){
+                url_list_str = '';
+            }
+            if(url_list_str){
+                if(limit == 1){
+                    //去掉预览
+                    _this.changeImg([])
+                }else{
+                    url_list = JSON.parse( url_list_str );
+                }
+                
+            }
+            var select_true_list = $('.narwhal_img_op'+name+'.narwhal_select_true');
+            for (var i = 0; i < select_true_list.length; i++) {
+                url_list.push(select_true_list[i].dataset.url);
+            }
+
+            url_list = _this.unique1(url_list);
+
+            
+            if(limit == 1){
+                $('input[name='+name+']').val(url_list[0]);
+                $('input[name='+name+']').attr("value",url_list[0]);
+            }else{
+                url_list_json = JSON.stringify( url_list );
+                $('input[name='+name+']').val(url_list_json);
+                $('input[name='+name+']').attr("value",url_list_json);
+            }
+            
+            _this.changeImg(url_list)
+            $('#NarwhalMediaModel'+_this.name).modal('hide');
         });
 
 
@@ -140,49 +228,7 @@
             return 1;
         });
 
-        // 提交按钮
-        $('#narwhal_submit'+_this.name).on('click',function(res){
-
-            var limit = _this.limit;
-            var name = _this.name;
-            var rootpath = _this.rootpath;
-            var remove = _this.remove
-            // 提交按钮
-            var url_list = [];
-            var url_list_str = $('input[name='+name+']').val();
-            if(url_list_str == '[]'){
-                url_list_str = '';
-            }
-            if(url_list_str){
-                if(limit == 1){
-                    //去掉预览
-                    _this.changeImg([])
-                }else{
-                    url_list = JSON.parse( url_list_str );
-                }
-                
-            }
-            var select_true_list = $('.narwhal_img_op'+name+'.narwhal_select_true');
-            for (var i = 0; i < select_true_list.length; i++) {
-                url_list.push(select_true_list[i].dataset.url);
-            }
-
-            url_list = _this.unique1(url_list);
-
-            
-            if(limit == 1){
-                $('input[name='+name+']').val(url_list[0]);
-                $('input[name='+name+']').attr("value",url_list[0]);
-            }else{
-                url_list_json = JSON.stringify( url_list );
-                $('input[name='+name+']').val(url_list_json);
-                $('input[name='+name+']').attr("value",url_list_json);
-            }
-            
-            _this.changeImg(url_list)
-            $('#NarwhalMediaModel'+_this.name).modal('hide');
-        });
-
+        
         // 预览操作
         $("body").delegate(".narwhal_img_show_"+_this.name+"_item","click",function(){
             var url_list = [];
@@ -270,7 +316,7 @@
                     if(data['list'][i]['isDir']){
                         var htmltemp = '';
                         htmltemp += '<div class="col-xs-4 col-md-3">';
-                        htmltemp +=     '<div class="thumbnail  narwhal_file_op" data-path="/'+data['list'][i]['name']+'">';
+                        htmltemp +=     '<div class="thumbnail  narwhal_file_op'+name+'" data-path="/'+data['list'][i]['name']+'">';
                         htmltemp +=         data['list'][i]['preview'];
                         htmltemp +=         '<div class="file-info">';
                         htmltemp +=             '<a href="#" class="file-name" title="'+data['list'][i]['name']+'">'+data['list'][i]['namesmall']+'</a>';
@@ -297,9 +343,9 @@
                         $('#narwhal_body_table_'+_this.name).append(htmltemp);
                     }
                 }
-                $('#narwhal_nav_ol_'+_this.name).html('<li class="narwhal_nav_li" data-path="/""><a href="#"><i class="fa fa-th-large"></i> </a></li>');
+                $('#narwhal_nav_ol_'+_this.name).html('<li class="narwhal_nav_li'+name+'" data-path="/""><a href="#"><i class="fa fa-th-large"></i> </a></li>');
                 for (var i = 0; i < data['nav'].length; i++) {
-                    $('#narwhal_nav_ol_'+_this.name).append('<li><a class="narwhal_nav_li" href="#" data-path="'+data['nav'][i]['url']+'"> '+data['nav'][i]['name']+'</a></li>');
+                    $('#narwhal_nav_ol_'+_this.name).append('<li><a class="narwhal_nav_li'+name+'" href="#" data-path="'+data['nav'][i]['url']+'"> '+data['nav'][i]['name']+'</a></li>');
                     _this.narwhal_crr_path = data['nav'][i]['url'];
                 }
             },
@@ -362,31 +408,5 @@
             $(".narwhal_img_show_row_"+name).append(html+'</div></div></div>');
         }
     }
-
-    //初始化
-    MediaYel.prototype.init = function(){
-        var name = this.name;
-        var limit = this.limit;
-        var remove = this.remove;
-        var rootpath = this.rootpath;
-        var _this = this;
-        var value = $('input[name='+name+']').val();
-        var value_arr = [];
-        if(value){
-            if(limit == 1){
-                if(value != '[]' && value != ''){
-                    value_arr.push(value)
-                }
-            }else{
-                value_arr=JSON.parse(value);
-            }
-            _this.changeImg(value_arr);
-        }else{
-            $('.narwhal_img_show_'+name).hide();
-        }
-        
-    }
-
     window.MediaYelDemo = MediaYel;
-
 })();

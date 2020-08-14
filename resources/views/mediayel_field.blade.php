@@ -38,13 +38,13 @@
                 <!-- /.btn-group -->
                 <label class="btn btn-default btn">
                     <i class="fa fa-upload"></i>&nbsp;&nbsp;上传
-                    <input type="file"  class="hidden file-upload narwhal_upload" multiple="">
+                    <input type="file"  class="hidden file-upload narwhal_upload{{$name}}" multiple="">
                 </label>
 
                 <div class="input-group input-group-sm pull-right goto-url" style="width: 250px;">
-                    <input type="text" class="form-control pull-right narwhal_dir_input" value="">
+                    <input type="text" class="form-control pull-right narwhal_dir_input" id='narwhal_dir_input_{{$name}}' value="">
                     <div class="input-group-btn">
-                        <button type="button" class="btn btn-default narwhal_dir_button"><i class="fa fa-folder"></i>&nbsp;&nbsp;新建</button>
+                        <button type="button" class="btn btn-default narwhal_dir_button_{{$name}}"><i class="fa fa-folder"></i>&nbsp;&nbsp;新建</button>
                     </div>
                 </div>
             </div>
