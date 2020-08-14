@@ -29,20 +29,29 @@ php artisan vendor:publish --provider=Narwhal\FormMedia\FormMediaServiceProvider
 ##### 可删除
 
 ```
-$form->MediaYel('photo','图片')->limit(1)->remove(true)->help('单图，可删除');
+$form->photo('photo','图片')->limit(1)->remove(true)->help('单图，可删除');
 ```
 
 ##### 不可删除
 
 ```
-$form->MediaYel('photo','图片')->limit(1)->remove(false)->help('单图，可删除');
+$form->photo('photo','图片')->limit(1)->remove(false)->help('单图，可删除');
 
-$form->MediaYel('photo','图片')->limit(1)->help('单图，可删除');
+$form->photo('photo','图片')->limit(1)->help('单图，可删除');
 ```
 
 #### 多图 数据库结构 json
 
 ```
-$form->MediaYel('photo','图片')->limit(9)->move(true);  //可删除
+$form->photos('photo','图片')->limit(9)->move(true);  //可删除
 
 ```
+
+### 参数说明
+```
+limit(int)      ： 图片限制条数
+remove(boolean) :  是否有删除按钮
+```
+
+
+
