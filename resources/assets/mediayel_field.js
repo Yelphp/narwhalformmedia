@@ -26,7 +26,7 @@
                     value_arr.push(value)
                 }
             }else{
-                value_arr=JSON.parse(value);
+                value_arr=this.isJSON(value);
             }
             _this.changeImg(value_arr);
         }else{
@@ -34,6 +34,8 @@
         }
         
     }
+
+
 
     // 初始化
     MediaYel.prototype.Run = function(){
@@ -143,7 +145,7 @@
                     //去掉预览
                     _this.changeImg([])
                 }else{
-                    url_list = JSON.parse( url_list_str );
+                    url_list = _this.isJSON( url_list_str );
                 }
                 
             }
@@ -159,12 +161,15 @@
 
             url_list = _this.unique1(url_list);
 
-            
             if(limit == 1){
                 $('input[name='+name+']').val(url_list[0]);
                 $('input[name='+name+']').attr("value",url_list[0]);
             }else{
                 url_list_json = JSON.stringify( url_list );
+                if(url_list_json == '[]'){
+                    $('#NarwhalMediaModel'+_this.name).modal('hide');
+                    return null;
+                }
                 $('input[name='+name+']').val(url_list_json);
                 $('input[name='+name+']').attr("value",url_list_json);
             }
@@ -193,7 +198,7 @@
                     if(limit == 1){
                         now_num_arr.push(now_num_val)
                     }else{
-                        now_num_arr=JSON.parse( now_num_val );
+                        now_num_arr=_this.isJSON( now_num_val );
                     }
                 }
                 var now_num = now_num_arr.length;
@@ -247,7 +252,7 @@
                     if(limit == 1){
                         now_num_arr.push(now_num_val)
                     }else{
-                        now_num_arr=JSON.parse( now_num_val );
+                        now_num_arr=_this.isJSON( now_num_val );
                     }
                 }
                 var now_num = now_num_arr.length;
@@ -301,7 +306,7 @@
             if(limit == 1){
                 url_list.push(url_list_str);
             }else{
-                url_list = JSON.parse( url_list_str );
+                url_list =_this.isJSON( url_list_str );
             }
 
             if(op == 'delete'){
@@ -470,5 +475,19 @@
             $(".narwhal_img_show_row_"+name).append(html+'</div></div></div>');
         }
     }
+
+
+    // 判断是否是json 字符串
+    MediaYel.prototype.isJSON = function(str) {
+        if (typeof str == 'string') {
+            try {
+                return JSON.parse(str);
+            } catch(e) {
+                return [str];
+            }
+        }
+        return [];  
+    }
+
     window.MediaYelDemo = MediaYel;
 })();
