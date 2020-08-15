@@ -1,5 +1,7 @@
 # Laravar-admin 图片管理拓展
 
+![图片名称](https://laravel-admin.org/storage/2020/08/15/7ZaxPdSjvZY7h0zTnwtJWp1aDLmcotlaPYcyHSbs.png)
+
 ## 依赖
 
 | php   >=7.0.0 
