@@ -241,6 +241,15 @@ class MediaManager extends Extension
                 }
                 break;
 
+            case 'video':
+                // if ($this->storage->getDriver()->getConfig()->has('url')) {
+                //     $url = $this->storage->url($file);
+                //     $preview = "<span class=\"file-icon has-video\"><video width='30%' src=\"$url\" alt=\"Attachment\"></span>";
+                // } else {
+                    $preview = '<span class="file-icon"><i class="fa fa-file-video-o"></i></span>';
+                // }
+                break;
+
             case 'pdf':
                 $preview = '<span class="file-icon"><i class="fa fa-file-pdf-o"></i></span>';
                 break;

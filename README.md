@@ -47,20 +47,29 @@ $form->photos('photo','图片')->limit(9)->remove(true);  //可删除
 
 ```
 
+#### 视频 数据库结构 json/varchar
+
+```
+$form->video('video','视频')->limit(9)->remove(true);  //可删除
+
+```
+
 ### 参数说明
 ```
 limit(int)      ： 图片限制条数
 remove(boolean) :  是否有删除按钮   
 
-photo 与  photos 的 参数默认值不一样
+photo 、 photos 、 video  的 参数默认值不一样
 
 photo  默认 limit = 1  remove = false
 
 photos 默认 limit = 9  remove = true
+
+video  默认 limit = 1  remove = true
 ```
 
 
-###### 多图上传提交的数据为 json 字符串，如需输出数组，请在对应模型中加入下面代码
+###### 多 图\视频 上传提交的数据为 json 字符串，如需输出数组，请在对应模型中加入下面代码
 ```
 namespace App\Models;
 

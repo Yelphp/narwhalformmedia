@@ -20,6 +20,7 @@ class FormMediaField extends Field
     protected $limit = 1;
     protected $rootpath = '';
     protected $remove = false;
+    protected $type = 'img';
 
     /**
      * Set rows of textarea.
@@ -60,7 +61,7 @@ class FormMediaField extends Field
         // 初始化
         $this->script = "
             if(!window.Demo{$name}){
-                window.Demo{$name} = new MediaYelDemo('{$name}',{$limit},'{$rootpath}',{$remove});
+                window.Demo{$name} = new MediaYelDemo('{$name}',{$limit},'{$rootpath}',{$remove}+'','{$this->type}');
                 Demo{$name}.Run();
             }
             Demo{$name}.init();

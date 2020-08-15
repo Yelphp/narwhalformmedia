@@ -5,11 +5,11 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Facades\Storage;
 
-class FormMediaFieldSelect extends FormMediaField
+class FormMediaVideo extends FormMediaField
 {
     
-    protected $limit = 9;
+    protected $limit = 1;
     protected $remove = true;
-    protected $type = 'img';
+    protected $type = 'video';
 
 }
