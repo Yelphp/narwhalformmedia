@@ -7,7 +7,6 @@ use Encore\Admin\Extension;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use League\Flysystem\Adapter\Local;
 
 /**
  * Class MediaManager.
@@ -58,19 +57,10 @@ class MediaManager extends Extension
         $disk = config('admin.upload.disk');
 
         $this->storage = Storage::disk($disk);
-
-        if (!$this->storage->getDriver()->getAdapter() instanceof Local) {
-            Handler::error('Error', '[laravel-admin-ext/media-manager] only works for local storage.');
-        }
     }
 
     public function ls()
     {
-        if (!$this->exists()) {
-            Handler::error('Error', "File or directory [$this->path] not exists");
-
-            return [];
-        }
 
         $files = $this->storage->files($this->path);
 
@@ -233,12 +223,21 @@ class MediaManager extends Extension
     {
         switch ($this->detectFileType($file)) {
             case 'image':
-                if ($this->storage->getDriver()->getConfig()->has('url')) {
-                    $url = $this->storage->url($file);
+                $url = $this->storage->url($file);
+                if ($url) {
                     $preview = "<span class=\"file-icon has-img\"><img src=\"$url\" alt=\"Attachment\"></span>";
                 } else {
                     $preview = '<span class="file-icon"><i class="fa fa-file-image-o"></i></span>';
                 }
+                break;
+
+            case 'video':
+                // if ($this->storage->getDriver()->getConfig()->has('url')) {
+                //     $url = $this->storage->url($file);
+                //     $preview = "<span class=\"file-icon has-video\"><video width='30%' src=\"$url\" alt=\"Attachment\"></span>";
+                // } else {
+                    $preview = '<span class="file-icon"><i class="fa fa-file-video-o"></i></span>';
+                // }
                 break;
 
             case 'pdf':
@@ -291,21 +290,26 @@ class MediaManager extends Extension
 
     public function getFilesize($file)
     {
-        $bytes = filesize($this->getFullPath($file));
+        try {
+            $bytes = filesize($this->getFullPath($file));
+            $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
 
-        $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
-
-        for ($i = 0; $bytes > 1024; $i++) {
-            $bytes /= 1024;
+            for ($i = 0; $bytes > 1024; $i++) {
+                $bytes /= 1024;
+            }
+            return round($bytes, 2).' '.$units[$i];
+        } catch (\ErrorException $e) {
+            return '未知';
         }
-
-        return round($bytes, 2).' '.$units[$i];
     }
 
     public function getFileChangeTime($file)
     {
-        $time = filectime($this->getFullPath($file));
-
-        return date('Y-m-d H:i:s', $time);
+        try {
+            $time = filectime($this->getFullPath($file));
+            return date('Y-m-d H:i:s', $time);
+        } catch (\ErrorException $e) {
+            return '';
+        }
     }
 }
