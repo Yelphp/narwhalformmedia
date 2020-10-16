@@ -20,6 +20,7 @@ class FormMediaField extends Field
     protected $limit = 1;
     protected $rootpath = '';
     protected $remove = false;
+    protected $type = 'img';
 
     /**
      * Set rows of textarea.
@@ -59,22 +60,12 @@ class FormMediaField extends Field
 
         // 初始化
         $this->script = "
-            window.Demo{$name} = new MediaYelDemo('{$name}',{$limit},'{$rootpath}',{$remove});
+            if(!window.Demo{$name}){
+                window.Demo{$name} = new MediaYelDemo('{$name}',{$limit},'{$rootpath}',{$remove}+'','{$this->type}');
+                Demo{$name}.Run();
+            }
             Demo{$name}.init();
             Demo{$name}.getdata();//获取数据
-            Demo{$name}.Run();
-            // 弹出图片选择器
-            $('#NarwhalMediaModel{$name}').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget) // Button that triggered the modal
-                var recipient = button.data('whatever') // Extract info from data-* attributes
-                var title = button.data('title') //标题
-                var name = button.data('name') //标题
-                var limit = button.data('limit') //标题
-                var remove = button.data('remove') //标题
-                var rootpath = button.data('rootpath') //标题
-                var modal = $(this)
-                modal.find('.modal-title').text('请选择' + title)
-            })
             ";
         
         return parent::render();

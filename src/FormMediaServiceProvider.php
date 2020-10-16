@@ -32,6 +32,7 @@ class FormMediaServiceProvider extends ServiceProvider
         Admin::booting(function () {
             Form::extend('photo', FormMediaField::class);
             Form::extend('photos', FormMediaFieldSelect::class);
+            Form::extend('video', FormMediaVideo::class);
         });
 
         // 加载路由

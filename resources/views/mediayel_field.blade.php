@@ -12,10 +12,11 @@
 
         @include('admin::form.error')
         <div class="input-group">
-            <input type="text" name="{{$name}}" class="form-control {{$class}}"  placeholder="{{ $placeholder }} "  {!! $attributes !!} value="{{ old($column, $value) }}" />
+            
+            <input type="text" name="{{$name}}" class="form-control {{$class}}"  placeholder="{{ $placeholder }} "  {!! $attributes !!} value="{{ old($column, $value)?(is_array(old($column, $value))?json_encode(old($column, $value)):old($column, $value)):'' }}" />
 
             <div class="input-group-btn input-group-append">
-                <div tabindex="500" class="btn btn-primary btn-file" type="button"  data-toggle="modal" data-target="#NarwhalMediaModel{{$name}}" data-title="{{$label}}" data-name="{{$name}}"  data-vaule="{{ old($column, $value) }}"  data-limit="{{$limit}}" data-rootpath="{{$rootpath}}" data-remove="{{$remove}}" data-token="{{ csrf_token() }}">
+                <div tabindex="500" class="btn btn-primary btn-file" type="button"  data-toggle="modal" data-target="#NarwhalMediaModel{{$name}}" data-title="{{$label}}" data-name="{{$name}}"  data-vaule="{{ old($column, $value)?(is_array(old($column, $value))?json_encode(old($column, $value)):old($column, $value)):'' }}"  data-limit="{{$limit}}" data-rootpath="{{$rootpath}}" data-remove="{{$remove}}" data-token="{{ csrf_token() }}">
                     <i class="glyphicon glyphicon-folder-open"></i>&nbsp;  
                     <span class="hidden-xs">浏览</span>
                 </div>
@@ -38,13 +39,13 @@
                 <!-- /.btn-group -->
                 <label class="btn btn-default btn">
                     <i class="fa fa-upload"></i>&nbsp;&nbsp;上传
-                    <input type="file"  class="hidden file-upload narwhal_upload" multiple="">
+                    <input type="file"  class="hidden file-upload narwhal_upload{{$name}}" multiple="">
                 </label>
 
                 <div class="input-group input-group-sm pull-right goto-url" style="width: 250px;">
-                    <input type="text" class="form-control pull-right narwhal_dir_input" value="">
+                    <input type="text" class="form-control pull-right narwhal_dir_input" id='narwhal_dir_input_{{$name}}' value="">
                     <div class="input-group-btn">
-                        <button type="button" class="btn btn-default narwhal_dir_button"><i class="fa fa-folder"></i>&nbsp;&nbsp;新建</button>
+                        <button type="button" class="btn btn-default narwhal_dir_button_{{$name}}"><i class="fa fa-folder"></i>&nbsp;&nbsp;新建</button>
                     </div>
                 </div>
             </div>
