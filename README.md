@@ -87,3 +87,40 @@ class Demo extends Model
 
 }
 ```
+
+
+
+### Oss 使用
+
+```
+安装教程 ：https://github.com/jacobcyl/Aliyun-oss-storage
+
+安装如果报错
+
+
+Error Class 'Symfony\Component\Filesystem\Exception\FileNotFoundException' not found
+
+
+则找到  出错文件 修改为：
+
+
+    /**
+     * @param $path
+     *
+     * @return string
+     */
+    public function getUrl( $path )
+    {
+        // if (!$this->has($path)) throw new FileNotFoundException($filePath.' not found');  //注释该行代码
+        return ( $this->ssl ? 'https://' : 'http://' ) . ( $this->isCname ? ( $this->cdnDomain == '' ? $this->endPoint : $this->cdnDomain ) : $this->bucket . '.' . $this->endPoint ) . '/' . ltrim($path, '/');
+    }
+
+
+按照教程配置好了之后
+
+把  admin.php 里面的  upload.disk  改为 oss  即可
+
+
+```
+
+
